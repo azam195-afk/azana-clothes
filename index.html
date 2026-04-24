@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azana AI - Ganti Baju Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#050507',
+                            800: '#0f0f13',
+                            700: '#1a1a21',
+                        },
+                        neon: {
+                            green: '#22c55e',
+                            cyan: '#00f2fe',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #050507;
+            color: #cbd5e1;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .bg-glass {
+            background: rgba(15, 15, 19, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .custom-loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1a1a21;
+            border-bottom-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeInDown 0.3s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-[#050507]">
+
+    <!-- Notifikasi -->
+    <div id="messageBox" class="message-box"></div>
+
+    <!-- Navigasi -->
+    <nav class="p-4 flex justify-between items-center max-w-2xl mx-auto">
+        <a href="index.html" class="text-white hover:text-neon-green transition-all flex items-center gap-2">
+            <i class="fas fa-arrow-left text-xs"></i>
+            <span class="text-xs font-bold uppercase tracking-widest">Kembali</span>
+        </a>
+        <h1 class="text-lg font-black text-white italic tracking-tighter">AZANA <span class="text-neon-green">AI</span></h1>
+    </nav>
+
+    <main class="max-w-xl mx-auto px-5">
+        
+        <!-- Judul Fitur -->
+        <div class="text-center mb-6">
+            <div class="inline-block px-3 py-1 bg-neon-green/10 border border-neon-green/20 rounded-full mb-3">
+                <span class="text-[8px] font-bold text-neon-green tracking-[0.3em] uppercase">Advanced Virtual Try-On</span>
+            </div>
+            <h2 class="text-2xl font-black text-white leading-none uppercase">GANTI BAJU <span class="text-neon-green italic text-xl">PRO</span></h2>
+            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest">Hanya ganti pakaian, tanpa ubah wajah & pose</p>
+        </div>
+
+        <!-- Slot Upload Berjajar (Compact) -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            
+            <!-- Foto Orang -->
+            <div id="boxOrang" onclick="document.getElementById('inputOrang').click()" class="relative h-32 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
+                <input type="file" id="inputOrang" class="hidden" accept="image/*" onchange="previewFile(this, 'boxOrang', 'person')">
+                <div id="contentOrang" class="flex flex-col items-center group-hover:scale-105 transition-transform">
+                    <i class="fas fa-user text-dark-700 text-lg group-hover:text-neon-green mb-1"></i>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase">Foto Orang</span>
+                </div>
+            </div>
+
+            <!-- Foto Baju -->
+            <div id="boxBaju" onclick="document.getElementById('inputBaju').click()" class="relative h-32 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
+                <input type="file" id="inputBaju" class="hidden" accept="image/*" onchange="previewFile(this, 'boxBaju', 'cloth')">
+                <div id="contentBaju" class="flex flex-col items-center group-hover:scale-105 transition-transform">
+                    <i class="fas fa-shirt text-dark-700 text-lg group-hover:text-neon-green mb-1"></i>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase">Foto Baju</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tombol Generate -->
+        <button id="btnGenerate" onclick="startSwapProcess()" class="w-full py-4 bg-neon-green hover:bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl transition-all shadow-lg shadow-neon-green/10 mb-8 flex items-center justify-center gap-2">
+            <span>GENERATE LOOK</span>
+            <i class="fas fa-magic"></i>
+        </button>
+
+        <!-- Container Hasil -->
+        <div id="resultArea" class="hidden animate-fade-in pb-10">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-[10px] font-black text-neon-green uppercase tracking-widest italic">Hasil AI Azana</span>
+                <div class="h-[1px] flex-1 bg-dark-700"></div>
+            </div>
+            
+            <div class="relative bg-glass border border-dark-700 rounded-[2rem] overflow-hidden min-h-[300px] flex items-center justify-center">
+                <!-- Loading -->
+                <div id="loader" class="hidden flex flex-col items-center text-center p-6">
+                    <span class="custom-loader mb-4"></span>
+                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse">Menyesuaikan pakaian tanpa ubah wajah...</p>
+                </div>
+
+                <!-- Gambar Akhir -->
+                <img id="finalImg" src="" alt="Hasil" class="hidden w-full h-auto">
+
+                <!-- Tombol Download -->
+                <div id="actionBtn" class="hidden absolute bottom-5 right-5">
+                    <button onclick="downloadResult()" class="h-10 w-10 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
+                        <i class="fas fa-download text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center">
+        <p class="text-[8px] text-slate-700 font-bold uppercase tracking-[0.4em]">Azana Design &bull; Gemini 2.5 Flash</p>
+    </footer>
+
+    <script>
+        const apiKey = ""; // Diset otomatis oleh sistem
+        let personB64 = "";
+        let clothB64 = "";
+
+        function toast(msg, err = true) {
+            const box = document.getElementById('messageBox');
+            box.innerText = msg;
+            box.style.backgroundColor = err ? "#ef4444" : "#22c55e";
+            box.style.display = "block";
+            setTimeout(() => { box.style.display = "none"; }, 3000);
+        }
+
+        function previewFile(input, boxId, type) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result.split(',')[1];
+                    if (type === 'person') personB64 = base64;
+                    else clothB64 = base64;
+
+                    const box = document.getElementById(boxId);
+                    box.innerHTML = `<img src="${e.target.result}" class="image-preview">`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
+            try {
+                const res = await fetch(url, options);
+                if (!res.ok) throw new Error();
+                return await res.json();
+            } catch (err) {
+                if (retries > 0) {
+                    await new Promise(r => setTimeout(r, backoff));
+                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                }
+                throw err;
+            }
+        }
+
+        async function startSwapProcess() {
+            if (!personB64 || !clothB64) {
+                toast("Upload foto orang & baju dulu!");
+                return;
+            }
+
+            const btn = document.getElementById('btnGenerate');
+            const resArea = document.getElementById('resultArea');
+            const loader = document.getElementById('loader');
+            const finalImg = document.getElementById('finalImg');
+            const actionBtn = document.getElementById('actionBtn');
+
+            // UI Loading
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> PROCESSING...`;
+            resArea.classList.remove('hidden');
+            loader.classList.remove('hidden');
+            finalImg.classList.add('hidden');
+            actionBtn.classList.add('hidden');
+
+            // Fokus ke hasil
+            window.scrollTo({ top: resArea.offsetTop - 20, behavior: 'smooth' });
+
+            // Prompt super ketat dalam Bahasa Inggris (lebih dipahami Gemini)
+            const strictPrompt = `TASK: VIRTUAL CLOTHES SWAP.
+Use the first image as the base person.
+Use the clothing from the second image to replace the clothing of the person in the first image.
+
+STRICT RULES - DO NOT BREAK:
+1. DO NOT change the person's face, facial expression, eyes, or mouth. If they are not smiling, KEEP them not smiling.
+2. DO NOT change the person's pose, position, or body shape.
+3. DO NOT change the background or lighting.
+4. ONLY swap the clothes. The new clothes must fit the existing body shape perfectly.
+5. Keep the face 100% identical to the first image.
+
+Return the modified image as the result.`;
+
+            const payload = {
+                contents: [{
+                    parts: [
+                        { text: strictPrompt },
+                        { inlineData: { mimeType: "image/png", data: personB64 } },
+                        { inlineData: { mimeType: "image/png", data: clothB64 } }
+                    ]
+                }],
+                generationConfig: {
+                    responseModalities: ["IMAGE"],
+                    temperature: 0.1, // Sangat rendah agar AI tidak berimajinasi (tidak senyum sendiri)
+                    topP: 0.8,
+                    topK: 40
+                }
+            };
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
+                const data = await fetchWithRetry(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const base64Out = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+                if (base64Out) {
+                    finalImg.src = `data:image/png;base64,${base64Out}`;
+                    loader.classList.add('hidden');
+                    finalImg.classList.remove('hidden');
+                    actionBtn.classList.remove('hidden');
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                toast("AI sedang sibuk atau foto kurang jelas. Coba lagi.");
+                resArea.classList.add('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `GENERATE LOOK <i class="fas fa-magic ml-1"></i>`;
+            }
+        }
+
+        function downloadResult() {
+            const img = document.getElementById('finalImg');
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = `AzanaAI-Swap-${Date.now()}.png`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
