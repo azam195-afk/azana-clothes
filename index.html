@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -82,16 +82,28 @@
             object-fit: cover;
             border-radius: 1rem;
         }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-[#050507]">
 
-    <!-- Notifikasi -->
     <div id="messageBox" class="message-box"></div>
 
-    <!-- Navigasi -->
     <nav class="p-4 flex justify-between items-center max-w-2xl mx-auto">
-        <a href="index.html" class="text-white hover:text-neon-green transition-all flex items-center gap-2">
+        <a href="#" class="text-white hover:text-neon-green transition-all flex items-center gap-2">
             <i class="fas fa-arrow-left text-xs"></i>
             <span class="text-xs font-bold uppercase tracking-widest">Kembali</span>
         </a>
@@ -100,63 +112,56 @@
 
     <main class="max-w-xl mx-auto px-5">
         
-        <!-- Judul Fitur -->
         <div class="text-center mb-6">
             <div class="inline-block px-3 py-1 bg-neon-green/10 border border-neon-green/20 rounded-full mb-3">
-                <span class="text-[8px] font-bold text-neon-green tracking-[0.3em] uppercase">Advanced Virtual Try-On</span>
+                <span class="text-[8px] font-bold text-neon-green tracking-[0.3em] uppercase">Identity Preservation Engine</span>
             </div>
             <h2 class="text-2xl font-black text-white leading-none uppercase">GANTI BAJU <span class="text-neon-green italic text-xl">PRO</span></h2>
-            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest">Hanya ganti pakaian, tanpa ubah wajah & pose</p>
+            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest italic">Maintain Face & Pose • High Accuracy</p>
         </div>
 
-        <!-- Slot Upload Berjajar (Compact) -->
         <div class="grid grid-cols-2 gap-3 mb-4">
-            
-            <!-- Foto Orang -->
-            <div id="boxOrang" onclick="document.getElementById('inputOrang').click()" class="relative h-32 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
+            <!-- Upload Foto Orang -->
+            <div id="boxOrang" onclick="document.getElementById('inputOrang').click()" class="relative h-40 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
                 <input type="file" id="inputOrang" class="hidden" accept="image/*" onchange="previewFile(this, 'boxOrang', 'person')">
                 <div id="contentOrang" class="flex flex-col items-center group-hover:scale-105 transition-transform">
-                    <i class="fas fa-user text-dark-700 text-lg group-hover:text-neon-green mb-1"></i>
-                    <span class="text-[9px] font-bold text-slate-500 uppercase">Foto Orang</span>
+                    <i class="fas fa-camera text-dark-700 text-2xl group-hover:text-neon-green mb-2"></i>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Foto Orang</span>
+                    <span class="text-[7px] text-slate-600 uppercase">(Target Wajah & Pose)</span>
                 </div>
             </div>
 
-            <!-- Foto Baju -->
-            <div id="boxBaju" onclick="document.getElementById('inputBaju').click()" class="relative h-32 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
+            <!-- Upload Foto Baju -->
+            <div id="boxBaju" onclick="document.getElementById('inputBaju').click()" class="relative h-40 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
                 <input type="file" id="inputBaju" class="hidden" accept="image/*" onchange="previewFile(this, 'boxBaju', 'cloth')">
                 <div id="contentBaju" class="flex flex-col items-center group-hover:scale-105 transition-transform">
-                    <i class="fas fa-shirt text-dark-700 text-lg group-hover:text-neon-green mb-1"></i>
-                    <span class="text-[9px] font-bold text-slate-500 uppercase">Foto Baju</span>
+                    <i class="fas fa-shirt text-dark-700 text-2xl group-hover:text-neon-green mb-2"></i>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Foto Baju</span>
+                    <span class="text-[7px] text-slate-600 uppercase">(Pakaian Baru)</span>
                 </div>
             </div>
-
         </div>
 
-        <!-- Tombol Generate -->
-        <button id="btnGenerate" onclick="startSwapProcess()" class="w-full py-4 bg-neon-green hover:bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl transition-all shadow-lg shadow-neon-green/10 mb-8 flex items-center justify-center gap-2">
-            <span>GENERATE LOOK</span>
-            <i class="fas fa-magic"></i>
+        <button id="btnGenerate" onclick="startSwapProcess()" class="btn-primary w-full py-4 text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl mb-8 flex items-center justify-center gap-2">
+            <span>PROSES SEKARANG</span>
+            <i class="fas fa-sparkles"></i>
         </button>
 
-        <!-- Container Hasil -->
         <div id="resultArea" class="hidden animate-fade-in pb-10">
             <div class="flex items-center gap-2 mb-4">
-                <span class="text-[10px] font-black text-neon-green uppercase tracking-widest italic">Hasil AI Azana</span>
+                <span class="text-[10px] font-black text-neon-green uppercase tracking-widest italic">Hasil Anyar Azana</span>
                 <div class="h-[1px] flex-1 bg-dark-700"></div>
             </div>
             
-            <div class="relative bg-glass border border-dark-700 rounded-[2rem] overflow-hidden min-h-[300px] flex items-center justify-center">
-                <!-- Loading -->
+            <div class="relative bg-glass border border-dark-700 rounded-[2rem] overflow-hidden min-h-[400px] flex items-center justify-center">
                 <div id="loader" class="hidden flex flex-col items-center text-center p-6">
                     <span class="custom-loader mb-4"></span>
-                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse">Menyesuaikan pakaian tanpa ubah wajah...</p>
+                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse">Menghitung pose & menyesuaikan kain...</p>
                 </div>
 
-                <!-- Gambar Akhir -->
                 <img id="finalImg" src="" alt="Hasil" class="hidden w-full h-auto">
 
-                <!-- Tombol Download -->
-                <div id="actionBtn" class="hidden absolute bottom-5 right-5">
+                <div id="actionBtn" class="hidden absolute bottom-5 right-5 flex gap-2">
                     <button onclick="downloadResult()" class="h-10 w-10 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
                         <i class="fas fa-download text-sm"></i>
                     </button>
@@ -167,20 +172,20 @@
     </main>
 
     <footer class="py-8 text-center">
-        <p class="text-[8px] text-slate-700 font-bold uppercase tracking-[0.4em]">Azana Design &bull; Gemini 2.5 Flash</p>
+        <p class="text-[8px] text-slate-700 font-bold uppercase tracking-[0.4em]">Azana Creative Studio &bull; Gemini Flash Engine</p>
     </footer>
 
     <script>
-        const apiKey = "AIzaSyAIoU8oXrTSVNonGxC_108Nz87kdtFBwko"; // Diset otomatis oleh sistem
+        const apiKey = "AIzaSyAIoU8oXrTSVNonGxC_108Nz87kdtFBwko"; // Diset otomatis
         let personB64 = "";
         let clothB64 = "";
 
-        function toast(msg, err = true) {
+        function toast(msg, type = 'error') {
             const box = document.getElementById('messageBox');
             box.innerText = msg;
-            box.style.backgroundColor = err ? "#ef4444" : "#22c55e";
+            box.style.backgroundColor = type === 'error' ? "#ef4444" : "#22c55e";
             box.style.display = "block";
-            setTimeout(() => { box.style.display = "none"; }, 3000);
+            setTimeout(() => { box.style.display = "none"; }, 4000);
         }
 
         function previewFile(input, boxId, type) {
@@ -198,20 +203,6 @@
             }
         }
 
-        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
-            try {
-                const res = await fetch(url, options);
-                if (!res.ok) throw new Error();
-                return await res.json();
-            } catch (err) {
-                if (retries > 0) {
-                    await new Promise(r => setTimeout(r, backoff));
-                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
-                }
-                throw err;
-            }
-        }
-
         async function startSwapProcess() {
             if (!personB64 || !clothB64) {
                 toast("Upload foto orang & baju dulu!");
@@ -224,33 +215,34 @@
             const finalImg = document.getElementById('finalImg');
             const actionBtn = document.getElementById('actionBtn');
 
-            // UI Loading
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> PROCESSING...`;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> HARAP TUNGGU...`;
             resArea.classList.remove('hidden');
             loader.classList.remove('hidden');
             finalImg.classList.add('hidden');
             actionBtn.classList.add('hidden');
 
-            // Fokus ke hasil
             window.scrollTo({ top: resArea.offsetTop - 20, behavior: 'smooth' });
 
-            // Prompt super ketat dalam Bahasa Inggris (lebih dipahami Gemini)
-            const strictPrompt = `TASK: VIRTUAL CLOTHES SWAP.
-Use the first image as the base person.
-Use the clothing from the second image to replace the clothing of the person in the first image.
+            // Prompt super ketat: Menuntut AI menjaga identitas person di gambar 1
+            const strictPrompt = `TASK: VIRTUAL TRY-ON (CLOTHES SWAP).
+1. Identify the person in the FIRST image. This is the base subject.
+2. Identify the garment (clothes) in the SECOND image.
+3. ACTION: Replace the person's current outfit in the FIRST image with the garment from the SECOND image.
+4. ABSOLUTE CONSTRAINTS:
+   - DO NOT CHANGE the person's face. It must be 100% identical to the first image.
+   - DO NOT CHANGE the person's pose or body position.
+   - DO NOT CHANGE the background.
+   - If the person is wearing a hijab, KEEP the hijab exactly as it is (same style and color).
+   - Only modify the clothing area.
+   - Ensure the new clothes fit the subject's body realistically.
+   - Maintain skin tone and lighting.
 
-STRICT RULES - DO NOT BREAK:
-1. DO NOT change the person's face, facial expression, eyes, or mouth. If they are not smiling, KEEP them not smiling.
-2. DO NOT change the person's pose, position, or body shape.
-3. DO NOT change the background or lighting.
-4. ONLY swap the clothes. The new clothes must fit the existing body shape perfectly.
-5. Keep the face 100% identical to the first image.
-
-Return the modified image as the result.`;
+Return the final modified image.`;
 
             const payload = {
                 contents: [{
+                    role: "user",
                     parts: [
                         { text: strictPrompt },
                         { inlineData: { mimeType: "image/png", data: personB64 } },
@@ -259,36 +251,54 @@ Return the modified image as the result.`;
                 }],
                 generationConfig: {
                     responseModalities: ["IMAGE"],
-                    temperature: 0.1, // Sangat rendah agar AI tidak berimajinasi (tidak senyum sendiri)
-                    topP: 0.8,
-                    topK: 40
+                    temperature: 0.1
                 }
             };
 
             try {
+                // Gunakan model gemini-2.5-flash-image-preview untuk image-to-image
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
-                const data = await fetchWithRetry(url, {
+                
+                const response = await fetchWithRetry(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                const base64Out = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                const base64Out = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
 
                 if (base64Out) {
                     finalImg.src = `data:image/png;base64,${base64Out}`;
                     loader.classList.add('hidden');
                     finalImg.classList.remove('hidden');
                     actionBtn.classList.remove('hidden');
+                    toast("Berhasil! Wajah & Pose tetap sama.", "success");
                 } else {
-                    throw new Error();
+                    throw new Error("AI gagal menghasilkan gambar.");
                 }
             } catch (err) {
-                toast("AI sedang sibuk atau foto kurang jelas. Coba lagi.");
+                toast("Gagal memproses. Coba kurangi ukuran file atau ganti foto yang lebih jelas.");
                 resArea.classList.add('hidden');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `GENERATE LOOK <i class="fas fa-magic ml-1"></i>`;
+                btn.innerHTML = `PROSES SEKARANG <i class="fas fa-sparkles ml-1"></i>`;
+            }
+        }
+
+        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, options);
+                    if (res.ok) return await res.json();
+                    if (res.status === 429) { // Rate limit
+                        await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
+                        continue;
+                    }
+                    throw new Error(`HTTP Error: ${res.status}`);
+                } catch (err) {
+                    if (i === retries - 1) throw err;
+                    await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
+                }
             }
         }
 
@@ -296,7 +306,7 @@ Return the modified image as the result.`;
             const img = document.getElementById('finalImg');
             const link = document.createElement('a');
             link.href = img.src;
-            link.download = `AzanaAI-Swap-${Date.now()}.png`;
+            link.download = `AzanaAI-TryOn-${Date.now()}.png`;
             link.click();
         }
     </script>
