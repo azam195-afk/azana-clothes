@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azana AI - Ganti Baju Pro</title>
+    <title>Azana AI - Professional Virtual Try-On</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
@@ -11,15 +11,8 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: {
-                            900: '#050507',
-                            800: '#0f0f13',
-                            700: '#1a1a21',
-                        },
-                        neon: {
-                            green: '#22c55e',
-                            cyan: '#00f2fe',
-                        }
+                        dark: { 950: '#050507', 900: '#0a0a0c', 800: '#121216', 700: '#1d1d23' },
+                        neon: { green: '#22c55e' }
                     }
                 }
             }
@@ -27,226 +20,209 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #050507;
-            color: #cbd5e1;
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        .bg-glass {
-            background: rgba(15, 15, 19, 0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .custom-loader {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #1a1a21;
-            border-bottom-color: #22c55e;
-            border-radius: 50%;
-            display: inline-block;
-            animation: rotation 1s linear infinite;
-        }
-
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .message-box {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: bold;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: fadeInDown 0.3s ease;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(-50%, -20px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
-        .image-preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0a0a0c; color: #e2e8f0; margin: 0; }
+        .glass-card { background: rgba(18, 18, 22, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .loader-spin { width: 35px; height: 35px; border: 3px solid #1d1d23; border-top-color: #22c55e; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .image-box { aspect-ratio: 3/4; border: 2px dashed #1d1d23; border-radius: 1.5rem; transition: all 0.3s ease; overflow: hidden; position: relative; }
+        .image-box:hover { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
     </style>
 </head>
-<body class="bg-[#050507]">
+<body class="antialiased pb-12">
 
-    <div id="messageBox" class="message-box"></div>
+    <!-- Notifikasi -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-full text-[11px] font-bold hidden transition-all shadow-2xl text-white"></div>
 
-    <nav class="p-4 flex justify-between items-center max-w-2xl mx-auto">
-        <a href="#" class="text-white hover:text-neon-green transition-all flex items-center gap-2">
-            <i class="fas fa-arrow-left text-xs"></i>
-            <span class="text-xs font-bold uppercase tracking-widest">Kembali</span>
-        </a>
-        <h1 class="text-lg font-black text-white italic tracking-tighter">AZANA <span class="text-neon-green">AI</span></h1>
+    <nav class="p-6 max-w-6xl mx-auto flex justify-between items-center sticky top-0 z-50 bg-[#0a0a0c]/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-neon-green rounded-xl flex items-center justify-center text-black shadow-lg shadow-neon-green/30">
+                <i class="fas fa-sparkles"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-black italic tracking-tighter text-white">AZANA <span class="text-neon-green">BRIDGE</span></h1>
+                <p class="text-[8px] text-zinc-500 font-bold uppercase tracking-[0.4em]">Pro Deployment Version</p>
+            </div>
+        </div>
     </nav>
 
-    <main class="max-w-xl mx-auto px-5">
-        
-        <div class="text-center mb-6">
-            <div class="inline-block px-3 py-1 bg-neon-green/10 border border-neon-green/20 rounded-full mb-3">
-                <span class="text-[8px] font-bold text-neon-green tracking-[0.3em] uppercase">Identity Preservation Engine</span>
-            </div>
-            <h2 class="text-2xl font-black text-white leading-none uppercase">GANTI BAJU <span class="text-neon-green italic text-xl">PRO</span></h2>
-            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest italic">Maintain Face & Pose • High Accuracy</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 mb-4">
-            <!-- Upload Foto Orang -->
-            <div id="boxOrang" onclick="document.getElementById('inputOrang').click()" class="relative h-40 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
-                <input type="file" id="inputOrang" class="hidden" accept="image/*" onchange="previewFile(this, 'boxOrang', 'person')">
-                <div id="contentOrang" class="flex flex-col items-center group-hover:scale-105 transition-transform">
-                    <i class="fas fa-camera text-dark-700 text-2xl group-hover:text-neon-green mb-2"></i>
-                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Foto Orang</span>
-                    <span class="text-[7px] text-slate-600 uppercase">(Target Wajah & Pose)</span>
-                </div>
-            </div>
-
-            <!-- Upload Foto Baju -->
-            <div id="boxBaju" onclick="document.getElementById('inputBaju').click()" class="relative h-40 bg-glass border border-dark-700 rounded-2xl flex flex-col items-center justify-center cursor-pointer group hover:border-neon-green/50 transition-all overflow-hidden">
-                <input type="file" id="inputBaju" class="hidden" accept="image/*" onchange="previewFile(this, 'boxBaju', 'cloth')">
-                <div id="contentBaju" class="flex flex-col items-center group-hover:scale-105 transition-transform">
-                    <i class="fas fa-shirt text-dark-700 text-2xl group-hover:text-neon-green mb-2"></i>
-                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Foto Baju</span>
-                    <span class="text-[7px] text-slate-600 uppercase">(Pakaian Baru)</span>
-                </div>
-            </div>
-        </div>
-
-        <button id="btnGenerate" onclick="startSwapProcess()" class="btn-primary w-full py-4 text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl mb-8 flex items-center justify-center gap-2">
-            <span>PROSES SEKARANG</span>
-            <i class="fas fa-sparkles"></i>
-        </button>
-
-        <div id="resultArea" class="hidden animate-fade-in pb-10">
-            <div class="flex items-center gap-2 mb-4">
-                <span class="text-[10px] font-black text-neon-green uppercase tracking-widest italic">Hasil Anyar Azana</span>
-                <div class="h-[1px] flex-1 bg-dark-700"></div>
-            </div>
+    <main class="max-w-6xl mx-auto px-6 py-4">
+        <div class="grid lg:grid-cols-12 gap-10">
             
-            <div class="relative bg-glass border border-dark-700 rounded-[2rem] overflow-hidden min-h-[400px] flex items-center justify-center">
-                <div id="loader" class="hidden flex flex-col items-center text-center p-6">
-                    <span class="custom-loader mb-4"></span>
-                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse">Menghitung pose & menyesuaikan kain...</p>
-                </div>
+            <!-- Konfigurasi (Kiri) -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass-card p-6 rounded-[2.5rem]">
+                    <div class="mb-8">
+                        <h2 class="text-lg font-bold text-white mb-1">Editor AI Virtual</h2>
+                        <p class="text-[11px] text-zinc-500 font-semibold uppercase tracking-widest">Ganti pakaian tanpa ubah wajah</p>
+                    </div>
 
-                <img id="finalImg" src="" alt="Hasil" class="hidden w-full h-auto">
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <!-- Slot Target -->
+                        <div onclick="document.getElementById('inTarget').click()" class="image-box cursor-pointer group">
+                            <input type="file" id="inTarget" class="hidden" accept="image/*" onchange="handleImage(this, 'prevTarget', 'person')">
+                            <div id="uiTarget" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                                <i class="fas fa-user-circle text-2xl text-zinc-800 group-hover:text-neon-green mb-2 transition-colors"></i>
+                                <span class="text-[9px] font-bold text-zinc-600 uppercase">Foto Target</span>
+                            </div>
+                            <img id="prevTarget" class="preview-img hidden">
+                        </div>
 
-                <div id="actionBtn" class="hidden absolute bottom-5 right-5 flex gap-2">
-                    <button onclick="downloadResult()" class="h-10 w-10 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
-                        <i class="fas fa-download text-sm"></i>
+                        <!-- Slot Baju -->
+                        <div onclick="document.getElementById('inCloth').click()" class="image-box cursor-pointer group">
+                            <input type="file" id="inCloth" class="hidden" accept="image/*" onchange="handleImage(this, 'prevCloth', 'cloth')">
+                            <div id="uiCloth" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                                <i class="fas fa-shirt text-2xl text-zinc-800 group-hover:text-neon-green mb-2 transition-colors"></i>
+                                <span class="text-[9px] font-bold text-zinc-600 uppercase">Foto Baju</span>
+                            </div>
+                            <img id="prevCloth" class="preview-img hidden">
+                        </div>
+                    </div>
+
+                    <button id="btnAction" onclick="startGeneration()" class="w-full py-5 bg-white hover:bg-neon-green text-black font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3">
+                        <i class="fas fa-bolt"></i>
+                        <span>GENERATE RESULT</span>
                     </button>
                 </div>
-            </div>
-        </div>
 
+                <div class="p-5 rounded-3xl bg-zinc-900/50 border border-white/5 flex gap-4">
+                    <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 shrink-0">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Identity Lock</h4>
+                        <p class="text-[10px] text-zinc-500 leading-relaxed font-medium uppercase">Sistem akan secara otomatis mendeteksi wajah & pose agar tidak berubah selama proses ganti baju.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview (Kanan) -->
+            <div class="lg:col-span-7">
+                <div class="glass-card rounded-[3rem] min-h-[600px] relative overflow-hidden flex items-center justify-center border-white/5 shadow-2xl">
+                    
+                    <!-- State Idle -->
+                    <div id="stateIdle" class="text-center p-12">
+                        <div class="w-20 h-20 bg-zinc-950 rounded-[2rem] flex items-center justify-center mx-auto mb-6 border border-white/5 shadow-inner">
+                            <i class="fas fa-images text-zinc-800 text-2xl"></i>
+                        </div>
+                        <p class="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.5em] italic">Awaiting Input</p>
+                    </div>
+
+                    <!-- State Loading -->
+                    <div id="stateLoading" class="hidden text-center space-y-8 p-12">
+                        <div class="loader-spin mx-auto"></div>
+                        <div class="space-y-3">
+                            <p id="loadText" class="text-neon-green font-black text-[11px] uppercase tracking-[0.4em] animate-pulse">Initializing Bridge...</p>
+                            <p class="text-zinc-600 text-[9px] uppercase font-bold tracking-widest max-w-[200px] mx-auto leading-relaxed">Menyesuaikan tekstur pakaian tanpa mengubah identitas wajah</p>
+                        </div>
+                    </div>
+
+                    <!-- State Result -->
+                    <div id="stateResult" class="hidden w-full h-full relative group">
+                        <img id="resImg" class="w-full h-auto" src="">
+                        <div class="absolute top-8 left-8 flex items-center gap-3">
+                            <div class="px-3 py-1 bg-neon-green/90 backdrop-blur-md text-black text-[9px] font-black uppercase rounded shadow-2xl flex items-center gap-2">
+                                <i class="fas fa-check-circle"></i> AI IDENTITY VERIFIED
+                            </div>
+                        </div>
+                        <div class="absolute bottom-8 right-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0">
+                            <button onclick="downloadOutput()" class="h-14 w-14 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
+                                <i class="fas fa-download text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    <footer class="py-8 text-center">
-        <p class="text-[8px] text-slate-700 font-bold uppercase tracking-[0.4em]">Azana Creative Studio &bull; Gemini Flash Engine</p>
-    </footer>
-
     <script>
-        const apiKey = "AIzaSyAIoU8oXrTSVNonGxC_108Nz87kdtFBwko"; // Diset otomatis
-        let personB64 = "";
-        let clothB64 = "";
+        // PENTING: Masukkan API Key kamu dari Google AI Studio di sini!
+        // Kalau kosong, proses akan gagal pas di-deploy.
+        const apiKey = "AIzaSyAIoU8oXrTSVNonGxC_108Nz87kdtFBwko"; 
 
-        function toast(msg, type = 'error') {
-            const box = document.getElementById('messageBox');
-            box.innerText = msg;
-            box.style.backgroundColor = type === 'error' ? "#ef4444" : "#22c55e";
-            box.style.display = "block";
-            setTimeout(() => { box.style.display = "none"; }, 4000);
+        let b64Person = "";
+        let b64Cloth = "";
+
+        function showToast(msg, error = true) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.backgroundColor = error ? "#ef4444" : "#22c55e";
+            t.style.display = "block";
+            setTimeout(() => t.style.display = "none", 5000);
         }
 
-        function previewFile(input, boxId, type) {
+        async function handleImage(input, previewId, type) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64 = e.target.result.split(',')[1];
-                    if (type === 'person') personB64 = base64;
-                    else clothB64 = base64;
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width;
+                        let h = img.height;
+                        const max = 1024;
+                        if (w > h && w > max) { h *= max/w; w = max; }
+                        else if (h > max) { w *= max/h; h = max; }
+                        canvas.width = w; canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        if (type === 'person') b64Person = dataUrl.split(',')[1];
+                        else b64Cloth = dataUrl.split(',')[1];
 
-                    const box = document.getElementById(boxId);
-                    box.innerHTML = `<img src="${e.target.result}" class="image-preview">`;
+                        const preview = document.getElementById(previewId);
+                        preview.src = dataUrl;
+                        preview.classList.remove('hidden');
+                        document.getElementById('ui' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('hidden');
+                    };
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        async function startSwapProcess() {
-            if (!personB64 || !clothB64) {
-                toast("Upload foto orang & baju dulu!");
+        async function startGeneration() {
+            // Cek API Key dulu
+            if (!apiKey) {
+                showToast("Dibutuhkan API Key Gemini untuk versi Deployment!");
+                console.error("Daftar API Key di https://aistudio.google.com/ lalu tempel di variabel apiKey di baris 153");
                 return;
             }
 
-            const btn = document.getElementById('btnGenerate');
-            const resArea = document.getElementById('resultArea');
-            const loader = document.getElementById('loader');
-            const finalImg = document.getElementById('finalImg');
-            const actionBtn = document.getElementById('actionBtn');
+            if (!b64Person || !b64Cloth) {
+                showToast("Unggah foto target & baju dulu!");
+                return;
+            }
+
+            const btn = document.getElementById('btnAction');
+            const idle = document.getElementById('stateIdle');
+            const load = document.getElementById('stateLoading');
+            const res = document.getElementById('stateResult');
+            const loadMsg = document.getElementById('loadText');
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> HARAP TUNGGU...`;
-            resArea.classList.remove('hidden');
-            loader.classList.remove('hidden');
-            finalImg.classList.add('hidden');
-            actionBtn.classList.add('hidden');
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ANALYZING...`;
+            idle.classList.add('hidden');
+            res.classList.add('hidden');
+            load.classList.remove('hidden');
 
-            window.scrollTo({ top: resArea.offsetTop - 20, behavior: 'smooth' });
+            window.scrollTo({ top: load.offsetTop - 100, behavior: 'smooth' });
 
-            // Prompt super ketat: Menuntut AI menjaga identitas person di gambar 1
-            const strictPrompt = `TASK: VIRTUAL TRY-ON (CLOTHES SWAP).
-1. Identify the person in the FIRST image. This is the base subject.
-2. Identify the garment (clothes) in the SECOND image.
-3. ACTION: Replace the person's current outfit in the FIRST image with the garment from the SECOND image.
-4. ABSOLUTE CONSTRAINTS:
-   - DO NOT CHANGE the person's face. It must be 100% identical to the first image.
-   - DO NOT CHANGE the person's pose or body position.
-   - DO NOT CHANGE the background.
-   - If the person is wearing a hijab, KEEP the hijab exactly as it is (same style and color).
-   - Only modify the clothing area.
-   - Ensure the new clothes fit the subject's body realistically.
-   - Maintain skin tone and lighting.
-
-Return the final modified image.`;
+            const prompt = `CRITICAL IDENTITY TASK: Virtual Try-On.
+            - Input 1 (Target): Keep the face, eyes, hair, skin color, and pose 100% IDENTICAL.
+            - Input 2 (Clothes): Extract the clothing.
+            - Action: Replace Target's outfit with Clothes.
+            - Result: Same original person wearing new clothes. No smiling if not smiling.`;
 
             const payload = {
                 contents: [{
-                    role: "user",
                     parts: [
-                        { text: strictPrompt },
-                        { inlineData: { mimeType: "image/png", data: personB64 } },
-                        { inlineData: { mimeType: "image/png", data: clothB64 } }
+                        { text: prompt },
+                        { inlineData: { mimeType: "image/jpeg", data: b64Person } },
+                        { inlineData: { mimeType: "image/jpeg", data: b64Cloth } }
                     ]
                 }],
                 generationConfig: {
@@ -255,58 +231,57 @@ Return the final modified image.`;
                 }
             };
 
-            try {
-                // Gunakan model gemini-2.5-flash-image-preview untuk image-to-image
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
-                
-                const response = await fetchWithRetry(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const base64Out = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-
-                if (base64Out) {
-                    finalImg.src = `data:image/png;base64,${base64Out}`;
-                    loader.classList.add('hidden');
-                    finalImg.classList.remove('hidden');
-                    actionBtn.classList.remove('hidden');
-                    toast("Berhasil! Wajah & Pose tetap sama.", "success");
-                } else {
-                    throw new Error("AI gagal menghasilkan gambar.");
-                }
-            } catch (err) {
-                toast("Gagal memproses. Coba kurangi ukuran file atau ganti foto yang lebih jelas.");
-                resArea.classList.add('hidden');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `PROSES SEKARANG <i class="fas fa-sparkles ml-1"></i>`;
-            }
-        }
-
-        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
-            for (let i = 0; i < retries; i++) {
+            const runApi = async (retries = 3) => {
                 try {
-                    const res = await fetch(url, options);
-                    if (res.ok) return await res.json();
-                    if (res.status === 429) { // Rate limit
-                        await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
-                        continue;
+                    loadMsg.innerText = `Menghubungkan ke Engine Pro... (Retry: ${3-retries})`;
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error("API_KEY_INVALID");
                     }
-                    throw new Error(`HTTP Error: ${res.status}`);
+
+                    const data = await response.json();
+                    const b64Out = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+                    if (b64Out) {
+                        const resImg = document.getElementById('resImg');
+                        resImg.src = `data:image/png;base64,${b64Out}`;
+                        resImg.onload = () => {
+                            load.classList.add('hidden');
+                            res.classList.remove('hidden');
+                            showToast("Generation Success!", false);
+                        };
+                    } else {
+                        throw new Error("EMPTY_RESPONSE");
+                    }
                 } catch (err) {
-                    if (i === retries - 1) throw err;
-                    await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
+                    if (err.message === "API_KEY_INVALID") {
+                        showToast("API Key Gemini kamu salah atau tidak aktif.");
+                    } else if (retries > 0) {
+                        loadMsg.innerText = "Server Sibuk, Mencoba Kembali...";
+                        setTimeout(() => runApi(retries - 1), 3000);
+                    } else {
+                        showToast("Server sedang padat. Silakan coba beberapa saat lagi.");
+                        load.classList.add('hidden');
+                        idle.classList.remove('hidden');
+                    }
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fas fa-bolt"></i> <span>GENERATE RESULT</span>`;
                 }
-            }
+            };
+
+            runApi();
         }
 
-        function downloadResult() {
-            const img = document.getElementById('finalImg');
+        function downloadOutput() {
             const link = document.createElement('a');
-            link.href = img.src;
-            link.download = `AzanaAI-TryOn-${Date.now()}.png`;
+            link.href = document.getElementById('resImg').src;
+            link.download = `AzanaBridge-Result-${Date.now()}.png`;
             link.click();
         }
     </script>
